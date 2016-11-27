@@ -1,0 +1,4 @@
+When I1=0 and I2=0 then output 0
+When I1=1 and I2=0 then output 1
+When I1=0 and I2=1 then output 1
+When I1=1 and I2=1 then output 0

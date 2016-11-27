@@ -1,0 +1,38 @@
+<project name="neuralnetworks" basedir="." default="package">
+
+    <path id="classpath">
+        <fileset id="lib" dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean" depends="">
+        <delete dir="bin"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="bin"/>
+        <javac classpathref="classpath"
+               debug="on"
+               deprecation="off"
+               destdir="bin"
+               fork="true"
+               memoryMaximumSize="1024m"
+               memoryInitialSize="512m"
+               source="1.8"
+                >
+            <src path="src"/>
+        </javac>
+    </target>
+
+    <target name="package" depends="compile">
+        <property name="deploy"
+                  value="lib" />
+
+        <jar destfile="${deploy}/nn.jar">
+            <fileset dir="bin">
+                <include name="**/*.class" />
+            </fileset>
+        </jar>
+    </target>
+</project>
