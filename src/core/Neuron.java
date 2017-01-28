@@ -153,19 +153,15 @@ public class Neuron
 		return perInputCalculationsMap.get(trainingInputId).idealOutput;
 	}
 	
-	/*Needs to be deprecated*/
 	public void setOutput(double output){ this.output = output; }
 	public double getOutput(){ return this.output; }
 	
-	/*Needs to be deprecated*/
 	public void setSum(double sum){ this.sum = sum; }
 	public double getSum(){ return this.sum; }
 	
-	/*Needs to be deprecated*/
 	public void setLastCalcDelta(double delta){ this.lastCalcDelta = delta; }
 	public double getLastCalcDelta(){ return this.lastCalcDelta; }
 	
-	/*Needs to be deprecated*/
 	public void setIdealOutput(double idealOutput){ this.idealOutput = idealOutput; }
 	public double getIdealOutput(){ return this.idealOutput; }
 }
