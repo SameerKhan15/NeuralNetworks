@@ -164,7 +164,8 @@ public class NeuralNetworkDriver
 					while(outboundConnectionsListIter.hasNext())
 					{
 						Connection connection = outboundConnectionsListIter.next();
-						wToDeltaProd = wToDeltaProd + connection.getConnectionWeight() * neuronsListMap.get(connection.getTargetNodeId()).getLastCalcDelta();
+						wToDeltaProd = wToDeltaProd + connection.getConnectionWeight() * neuronsListMap.get(connection.getTargetNodeId()).
+								getLastCalcDelta();
 					}
 					neuron.setLastCalcDelta(nodeDerivative * wToDeltaProd);
 				}
@@ -180,7 +181,8 @@ public class NeuralNetworkDriver
 			while(memberNeuronsListIter.hasNext())
 			{
 				//Get the connections list from the first training set. Note: all training sets share the same connection objects
-				List<Connection> connectionsList = neuronsListMap.entrySet().iterator().next().getValue().get(memberNeuronsListIter.next()).getIncomingConnectionsList();
+				List<Connection> connectionsList = neuronsListMap.entrySet().iterator().next().getValue().get(memberNeuronsListIter.next()).
+						getIncomingConnectionsList();
 				Iterator<Connection> connectionsListIter = connectionsList.iterator();
 				while(connectionsListIter.hasNext())
 				{
