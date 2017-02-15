@@ -1,37 +1,160 @@
-neural.network.1485138851688 
-	/*input[0][0] = 1;
-	input[0][1] = 0;
-	output[0][0] = 1;
-					
-	input[1][0] = 0;
-	input[1][1] = 0;
-	output[1][0] = 0;
-			
-	input[2][0] = 0;
-	input[2][1] = 1;
-	output[2][0] = 1;
-			
-	input[3][0] = 1;
-	input[3][1] = 1;
-	output[3][0] = 0;*/
+Key attributes - 
 
-neural.network.1485141383960
-	input[0][0] = 0.05;
-	input[0][1] = 0.1;
-	output[0][0] = 0;
-	output[0][1] = 1;
-			
-	input[1][0] = 0.2;
-	input[1][1] = 0.1;
-	output[1][0] = 1;
-	output[1][1] = 0;
-			
-	input[2][0] = 0.02;
-	input[2][1] = 0.8;
-	output[2][0] = 0;
-	output[2][1] = 1;
-			
-	input[3][0] = 0.9;
-	input[3][1] = 0.4;
-	output[3][0] = 1;
-	output[3][1] = 0;
+	a) Supports only a 3 layer network - I x H x O input/hidden/output size, where I is the number of input neurons, H is the number of hidden neurons,  and O is the number of output neurons. There are no constraints on I, H and O values.
+
+	c) Training algorithm: Back Propagation
+
+	d) Type of training: Batch
+
+	e) Error Function: MSE Error
+
+How to use the package?
+
+	The package is designed to be used as a library, via its exposed APIs. The jars required to use the package are under lib folder. Link the jars in your project, in order to use the APIs.
+
+How to use the APIs?
+
+	Example use case# 1: Create a [2,2,1] un-trained network, train with n number of datasets, plot the graph, and test the network with sample data.
+	
+	Steps:
+	a) Spawn a [2,2,1] (non-trained) neural network. 
+		Non-trained NN is the one with no prior training, and starts with random intialization of weights. The random number generates uniformly distributed weights, with [-1.0,1.0] as its lower and upper bounds respectively.
+
+		NeuralNetwork neuralNetwork = new NeuralNetwork(2,2,1,null);
+		neuralNetwork.setLearningRate(3);
+		neuralNetwork.setMomentum(0.3);
+
+	b) Train the network with the following data -
+		/*
+  		//Set#1
+  		input[0][0] = 1;
+  		input[0][1] = 0;
+  		output[0][0] = 1;
+  
+  		//Set#2						
+  		input[1][0] = 0;
+  		input[1][1] = 0;
+  		output[1][0] = 0;
+  
+  		//Set#3			
+  		input[2][0] = 0;
+  		input[2][1] = 1;
+  		output[2][0] = 1;
+  
+  		//Set#4			
+  		input[3][0] = 1;
+  		input[3][1] = 1;
+  		output[3][0] = 0;
+		*/
+
+		neuralNetwork.train(input, output, .0001, 10000);
+		//In the method arguments above, the desired error rate is '.0001' and max # of epochs is 10k. The upper bound on epochs is set in order to prevent the Neural Network to stuck in unlimited loop cycles, for initialized weights that fail to converge for a given training data. Upon reaching the limit, the training stops with an error message indicating the failure to converge. The user/caller of the API is expected to re-try, with new initial weights (done via initializing the constructor). 
+
+
+		//After the training is completed, the weights are persisted in a file (naming convention: neural.network.<unique identifier>), under the System.getProperty("user.dir") directory.
+
+	c) Draw the Neural Network (along with the trained weights) 
+	   neuralNetwork.plotGraph(); 
+
+	d) Test the Neural Network with sample data
+		double[] input3 = new double[2];
+		input3[0] = 0;
+		input3[1] = 1;
+		double[] output3 = neuralNetwork.getOutput(input3);
+		System.out.println("ideal output[0,1]");
+		for(int a = 0 ; a < output3.length ; a++)
+		{
+			System.out.println("output["+a+"]"+output3[a]);
+		}
+
+	Example use case# 2.1: Create a [2,2,2] un-trained network, train with n number of datasets, plot the graph and terminate the program. Load the trained network, examine the accuracy of the network with a set of test data. 
+
+	Steps:
+	a) Spawn a 2,2,2 (non-trained) neural network
+		NeuralNetwork neuralNetwork = new NeuralNetwork(2,2,2,null);
+		neuralNetwork.setLearningRate(3);
+		neuralNetwork.setMomentum(0.3);
+
+	b) Train the network with the following data -
+		/*
+  		//Set#1
+ 		input[0][0] = 0.2;
+ 		input[0][1] = 0.5;
+ 		output[0][0] = 0;
+ 		output[0][1] = 1; 
+ 
+ 		//Set#2	
+ 		input[1][0] = 0.3;
+ 		input[1][1] = 0.6;
+ 		output[1][0] = 0;
+ 		output[1][1] = 1;
+ 
+ 		//Set#3
+ 		input[2][0] = 0.02;
+ 		input[2][1] = 0.8;
+ 		output[2][0] = 0;
+ 		output[2][1] = 1;
+ 
+ 		//Set#4
+ 		input[3][0] = 0.9;
+ 		input[3][1] = 0.4;
+ 		output[3][0] = 1;
+ 		output[3][1] = 0;
+		*/
+
+	neuralNetwork.train(input, output, .0001, 10000);
+	//After training completed, the weights are persisted in a file (naming convention: neural.network.<unique identifier>), under the System.getProperty("user.dir"). Make a note of this file since this will be the value of the 3rd argument of the NeuralNetwork constructor for step 'e'. 
+
+	c) Draw the Neural Network (along with the trained weights) 
+	   neuralNetwork.plotGraph();
+
+	d) Terminate the program
+		ctrl-c (or whatever)
+
+	e) Load the trained network
+	   NeuralNetwork neuralNetwork = new NeuralNetwork(2,2,2,"neural.network.<unique id>");
+
+	f) Test the (trained) network
+	   //Test#1
+	   double[] input3 = new double[2];
+	   input3[0] = 0.05;
+	   input3[1] = 0.4;
+	   double[] output3 = neuralNetwork.getOutput(input3);
+	   System.out.println("ideal output[0,1]");
+	   for(int a = 0 ; a < output3.length ; a++)
+	   {
+			System.out.println("output["+a+"]"+output3[a]);
+	   }
+	
+		//Test#2
+		double[] input4 = new double[2];
+		input4[0] = 0.5;
+		input4[1] = 0.1;
+		double[] output4 = neuralNetwork.getOutput(input4);
+		System.out.println("ideal output[1,0]");
+		for(int a = 0 ; a < output4.length ; a++)
+		{
+			System.out.println("output["+a+"]"+output4[a]);
+		}
+	
+		//Test#3
+		double[] input5 = new double[2];
+		input5[0] = 0.5;
+		input5[1] = 0.8;
+		double[] output5 = neuralNetwork.getOutput(input5);
+		System.out.println("ideal output[0,1]");
+		for(int a = 0 ; a < output5.length ; a++)
+		{
+			System.out.println("output["+a+"]"+output5[a]);
+		}
+	
+		//Test#4
+		double[] input6 = new double[2];
+		input6[0] = 0.9;
+		input6[1] = 0.1;
+		double[] output6 = neuralNetwork.getOutput(input6);
+		System.out.println("ideal output[1,0]");
+		for(int a = 0 ; a < output6.length ; a++)
+		{
+			System.out.println("output["+a+"]"+output6[a]);
+		}

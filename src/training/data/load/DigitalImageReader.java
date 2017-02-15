@@ -15,6 +15,7 @@ public class DigitalImageReader
 	public static void main(String args[])
 	{
 		try {
+			int minValue=0, maxValue=0;
 			BufferedImage imageIO = ImageIO.read(new FileInputStream("/Users/sameer.khan/Documents/workspace/OCR/parsed_images_output"
 					+ "/Sameer_HandWriting_2.jpg/char_0.png"));
 			System.out.println("Height:"+imageIO.getHeight()+" Weight:"+imageIO.getWidth());
@@ -30,10 +31,20 @@ public class DigitalImageReader
 					int value = (int) imageIO.getData().getPixel(a, b, dArray)[0];
 					//System.out.println(value);
 					raster.setSample(a, b, 0, value);
+					if(minValue > value)
+					{
+						minValue = value;
+					}
+					
+					if(maxValue < value)
+					{
+						maxValue = value;
+					}
 				}
 			}
 			File f = new File(System.getProperty("user.dir")+"/"+"sameer"+".png");
 			ImageIO.write(bufferedImage, "PNG", f);
+			System.out.println("minVal:"+minValue+","+"maxVal:"+maxValue);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
